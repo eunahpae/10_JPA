@@ -2,6 +2,8 @@ package com.ohgiraffers.section02.crud;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 
@@ -16,6 +18,7 @@ public class Menu {
 
     @Id // 기본 키(primary key) 지정
     @Column(name = "menu_code") // 실제 테이블의 컬럼 이름과 매핑
+    @GeneratedValue(strategy = GenerationType.IDENTITY) // DB에서 자동 증가(AUTO_INCREMENT) 전략 사용
     private int menuCode;
 
     @Column(name = "menu_name") // 메뉴 이름 컬럼과 매핑
@@ -37,10 +40,9 @@ public class Menu {
      */
     protected Menu() {}
 
-    // 전체필드 생성자도 테스트를 위해 생성
-    public Menu(int menuCode, String menuName, int menuPrice, int categoryCode,
+    // 메뉴코드를 제외한 전체필드 생성자도 테스트를 위해 생성
+    public Menu(String menuName, int menuPrice, int categoryCode,
         char orderableStatus) {
-        this.menuCode = menuCode;
         this.menuName = menuName;
         this.menuPrice = menuPrice;
         this.categoryCode = categoryCode;
