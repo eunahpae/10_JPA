@@ -1,8 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <persistence xmlns="http://xmlns.jcp.org/xml/ns/persistence" version="2.2">
+  <!-- persistence.xml 방식 (비스프링 환경 또는 순수 Java SE 환경에서 사용) -->
   <!-- 엔티티 매니저 팩토리를 식별하기 위한 이름 설정 -->
   <persistence-unit name="jpatest">
 
+    <!-- [순수 JPA 환경에서는 JPA에서 관리할 엔티티 클래스 등록 필수]
+         - 해당 클래스가 @Entity 어노테이션을 갖고 있어야 하며
+           (@Entity 어노테이션이 붙어 있어도, XML 설정에 등록하지 않으면 Entity로 인식되지 않음),
+         - 이 클래스는 JPA가 테이블과 매핑하여 관리하게 된다.
+         - 명시적으로 등록하지 않으면 자동 인식이 되지 않는 환경도 있기 때문에 보통 명시해 준다.
+         - 여러 개의 엔티티가 있는 경우 각각의 <class>로 추가해야 함 -->
     <class>com.ohgiraffers.section02.crud.Menu</class>
 
     <properties>
