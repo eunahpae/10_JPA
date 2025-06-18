@@ -11,6 +11,7 @@
          - 명시적으로 등록하지 않으면 자동 인식이 되지 않는 환경도 있기 때문에 보통 명시해 준다.
          - 여러 개의 엔티티가 있는 경우 각각의 <class>로 추가해야 함 -->
     <class>com.ohgiraffers.section02.crud.Menu</class>
+    <class>com.ohgiraffers.section03.entity.Menu</class>
 
     <properties>
       <!-- 데이터 베이스 연결 정보 -->
