@@ -1,11 +1,9 @@
 package com.ohgiraffers.associationmapping.section01.manytoone;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import java.util.stream.Stream;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -64,6 +62,24 @@ public class ManyToOneServiceTests {
         int categoryCode, String categoryName, String orderableStatus
     ) {
 
+        // given
+        MenuDTO menuInfo = new MenuDTO(
+            menuCode,
+            menuName,
+            menuPrice,
+            new CategoryDTO(
+                categoryCode,
+                categoryName,
+                null
+            ),
+            orderableStatus
+        );
+
+        // when
+        // then
+        assertDoesNotThrow(
+            () -> manyToOneService.registMenu(menuInfo)
+        );
 
     }
 
