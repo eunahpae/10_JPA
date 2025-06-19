@@ -1,5 +1,7 @@
 package com.ohgiraffers.mapping.section01.entity;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 import java.time.LocalDateTime;
 import java.util.stream.Stream;
 import org.junit.jupiter.api.Assertions;
@@ -40,6 +42,7 @@ public class MemberRegistServiceTests {
             )
         );
     }
+
     @DisplayName("테이블 생성 테스트")
     @ParameterizedTest
     @MethodSource("getMember")
@@ -66,7 +69,32 @@ public class MemberRegistServiceTests {
         );
     }
 
+    @DisplayName("프로퍼티 접근 테스트")
+    @ParameterizedTest
+    @MethodSource("getMember")
+    void testAccessProperty(
+        String memberId, String memberPwd,
+        String memberName, String phone, String address,
+        LocalDateTime enrollDate, MemberRole memberRole, String status
+    ) {
+        //given
+        MemberRegistDTO newMember = new MemberRegistDTO(
+            memberId,
+            memberPwd,
+            memberName,
+            phone,
+            address,
+            enrollDate,
+            memberRole,
+            status
+        );
+        //when
+        String registedName = memberRegistService.registMemberAndFindName(newMember);
 
+        //then
+        assertEquals(memberName + "님", registedName);
+
+    }
 
 
 }

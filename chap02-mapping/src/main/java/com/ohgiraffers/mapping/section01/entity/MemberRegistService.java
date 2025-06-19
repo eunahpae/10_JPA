@@ -59,4 +59,11 @@ public class MemberRegistService {
         // 트랜잭션 커밋 시점에 실제 데이터베이스에 INSERT 쿼리 실행
         memberRepository.save(member);
     }
+
+    @Transactional
+    public String registMemberAndFindName(MemberRegistDTO newMember) {
+        registMember(newMember);
+        return memberRepository.findNameById(newMember.getMemberId());
+    }
+
 }
