@@ -11,17 +11,20 @@ public class Menu {
     private String menuName;
     private int menuPrice;
 
-    // 다대일(N:1) 관계 설정
-    // - 이 엔티티는 다수(N)의 입장에서 연관된 단일(1) Category 엔티티를 참조한다.
-    // - 예: 하나의 메뉴(Menu)는 하나의 카테고리(Category)에 속한다.
-    // - CascadeType.PERSIST: 연관된 Category가 영속 상태가 아니면, Menu 저장 시 함께 저장됨 (전파 저장)
+    /* 다대일(N:1) 관계 설정
+     * - 다수(N)의 메뉴가 하나(1)의 카테고리에 속하는 관계
+     * - 외래키는 Menu 테이블의 categoryCode 컬럼에 생성됨
+     * - CascadeType.PERSIST: Menu 저장 시 연관된 Category도 함께 저장 */
+
+    /* @ManyToOne의 fetch 전략
+     * - 기본값: EAGER(즉시 로딩) - 엔티티 조회 시 연관 엔티티도 즉시 로딩
+     * - 권장값: LAZY(지연 로딩) - 실제 사용 시점에 쿼리 실행, N+1 문제 방지
+     *
+     * 사용법: @ManyToOne(cascade = CascadeType.PERSIST, fetch = FetchType.LAZY) */
     @ManyToOne(cascade = CascadeType.PERSIST)
-    // 외래 키 매핑
-    // - 이 엔티티의 테이블에 생성될 외래 키 컬럼명을 "categoryCode"로 지정
-    // - 기본적으로 참조 대상 엔티티(Category)의 PK를 외래 키로 사용
-    // - name 속성은 외래 키 컬럼 이름을 명시적으로 지정한다.
-    @JoinColumn(name = "categoryCode")
+    @JoinColumn(name = "categoryCode") // 외래키 컬럼명 지정
     private Category category;
+
     private String orderableStatus;
 
     public Menu() {
