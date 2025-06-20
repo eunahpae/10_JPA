@@ -11,9 +11,8 @@ spring:
       ddl-auto: none
       naming:
         physical-strategy: org.hibernate.boot.model.naming.CamelCaseToUnderscoresNamingStrategy
-        # Hibernate? ??? ??? ?? ??
-        # - Java? CamelCase ???? ??/??? ??? DB? snake_case? ?? ????
-        # ?: memberId ? member_id, CategoryName ? category_name
+        # Hibernate 네이밍 전략 (CamelCase → snake_case)
+        # 예: memberId → member_id, CategoryName → category_name
     properties:
       hibernate:
         format_sql: true
