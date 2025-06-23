@@ -57,4 +57,10 @@ public class JoinRepository {
             + "RIGHT JOIN m.category c ORDER BY m.category.categoryCode";
         return entityManager.createQuery(jpql).getResultList();
     }
+
+    public List<Object[]> selectByCollectionJoin() {
+        String jpql = "SELECT m.menuName, c.categoryName FROM Section06Category c "
+            + "RIGHT JOIN c.menuList m ORDER BY m.category.categoryCode";
+        return entityManager.createQuery(jpql).getResultList();
+    }
 }

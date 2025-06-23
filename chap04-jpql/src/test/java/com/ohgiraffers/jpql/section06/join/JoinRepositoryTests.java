@@ -57,4 +57,23 @@ public class JoinRepositoryTests {
         );
     }
 
+    @DisplayName("CollectionJoin을 이용한 조회 테스트")
+    @Test
+    void testSelectByCollectionJoin() {
+        // given
+        // when
+        List<Object[]> categoryList = joinRepository.selectByCollectionJoin();
+
+        // then
+        assertNotNull(categoryList);
+        categoryList.forEach(
+            row -> {
+                for (Object column : row) {
+                    System.out.print(column + " ");
+                }
+                System.out.println();
+            }
+        );
+    }
+
 }
