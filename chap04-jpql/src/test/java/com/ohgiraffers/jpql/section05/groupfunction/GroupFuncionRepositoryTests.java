@@ -53,7 +53,8 @@ public class GroupFuncionRepositoryTests {
         long minPrice = 50000L;
 
         // when
-        List<Object[]> sumPriceOfCategoryList = groupFunctionRepository.selectByGroupByHaving(minPrice);
+        List<Object[]> sumPriceOfCategoryList = groupFunctionRepository.selectByGroupByHaving(
+            minPrice);
 
         // then
         assertNotNull(sumPriceOfCategoryList);
@@ -68,4 +69,4 @@ public class GroupFuncionRepositoryTests {
 
     }
 
-    }
+}
