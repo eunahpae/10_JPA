@@ -1,6 +1,5 @@
 package com.ohgiraffers.associationmapping.section03.bidirection;
 
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
