@@ -8,8 +8,8 @@
 
   <section style="text-align: center;">
     <h1>메뉴 목록</h1>
-    <table style="margin: 0 auto;">
-      <tr>
+    <table border="1" style="margin: 0 auto;">
+    <tr>
         <th>메뉴번호</th>
         <th>메뉴이름</th>
         <th>메뉴가격</th>
@@ -18,12 +18,16 @@
       </tr>
       <tr th:each="menu : ${ menuList }">
         <td th:text="${ menu.menuCode }"></td>
-        <td th:text="${ menu.menuName }"></td>
+        <td>
+          <a th:href="@{/menu/{menuCode}(menuCode=${menu.menuCode})}"
+               th:text="${menu.menuName}"></a>
+        </td>
         <td th:text="${ menu.menuPrice }"></td>
         <td th:text="${ menu.categoryCode }"></td>
         <td th:text="${ menu.orderableStatus }"></td>
       </tr>
     </table>
+    <br>
 
     <div id="paging">
       <!-- 맨 앞으로 이동 -->
@@ -63,7 +67,12 @@
         >>
       </button>
     </div>
+    <br>
+    <button onclick="location.href='/menu/regist'">메뉴 등록하기</button>
+    <button onclick="location.href='/menu/modify'">메뉴 수정하기</button>
+    <button onclick="location.href='/menu/delete'">메뉴 삭제하기</button>
   </section>
+
 
 </body>
 </html>

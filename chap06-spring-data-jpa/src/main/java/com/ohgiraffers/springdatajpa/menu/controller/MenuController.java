@@ -15,10 +15,13 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Slf4j // 로그 출력을 위한 Lombok 어노테이션 (log.info 등 사용 가능)
 @Controller
@@ -88,7 +91,6 @@ public class MenuController {
         model.addAttribute("paging", paging);       // 페이지 번호 범위 정보
         model.addAttribute("menuList", menuList);   // Page<MenuDTO> 객체
 
-        // 리스트 페이지 뷰 반환
         return "menu/list";
     }
 
@@ -98,10 +100,8 @@ public class MenuController {
 
     @GetMapping("/search")
     public String findByMenuPrice(@RequestParam Integer menuPrice, Model model) {
-
         List<MenuDTO> menuList = menuService.findByMenuPrice(menuPrice);
         model.addAttribute("menuList", menuList);
-
         return "menu/searchResult";
     }
 
@@ -113,6 +113,32 @@ public class MenuController {
     @ResponseBody
     public List<CategoryDTO> findCategoryList() {
         return menuService.findAllCategory();
+    }
+
+    @PostMapping("/regist")
+    public String registMenu(@ModelAttribute MenuDTO menuDTO) {
+        menuService.registMenu(menuDTO);
+        return "redirect:/menu/list";
+    }
+
+    @GetMapping("/modify")
+    public void modifyPage() {
+    }
+
+    @PostMapping("/modify")
+    public String modifyMenu(@ModelAttribute MenuDTO menuDTO) {
+        menuService.modifyMenu(menuDTO);
+        return "redirect:/menu/" + menuDTO.getMenuCode();
+    }
+
+    @GetMapping("/delete")
+    public void deletePage() {
+    }
+
+    @PostMapping("/delete")
+    public String deleteMenu(@RequestParam Integer menuCode) {
+        menuService.deleteMenu(menuCode);
+        return "redirect:/menu/list";
     }
 
 }

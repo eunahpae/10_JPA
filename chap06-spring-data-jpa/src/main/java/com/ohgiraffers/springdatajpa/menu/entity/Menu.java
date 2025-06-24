@@ -1,6 +1,8 @@
 package com.ohgiraffers.springdatajpa.menu.entity;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import lombok.AccessLevel;
@@ -30,10 +32,16 @@ import lombok.NoArgsConstructor;
 public class Menu {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int menuCode;
     private String menuName;
     private int menuPrice;
     private int categoryCode;
     private char orderableStatus;
+
+
+    public void modifyMenuName(String menuName) {
+        this.menuName = menuName;
+    }
 
 }

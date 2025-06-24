@@ -14,6 +14,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * MenuService 클래스는 메뉴와 관련된 비즈니스 로직을 담당하는 서비스 계층이다. 컨트롤러로부터 요청을 받아 Repository를 통해 데이터를 조회하고,
@@ -131,4 +132,35 @@ public class MenuService {
             .toList();
     }
 
+    /**
+     * registMenu: 신규 메뉴 등록
+     * <p>
+     * - 전달받은 MenuDTO 객체를 ModelMapper를 사용해 Menu 엔티티로 변환한 뒤 저장한다. - @Transactional 어노테이션으로 트랜잭션을
+     * 보장한다.
+     *
+     * @param menuDTO 신규 등록할 메뉴 정보
+     */
+    @Transactional
+    public void registMenu(MenuDTO menuDTO) {
+        menuRepository.save(modelMapper.map(menuDTO, Menu.class));
+    }
+
+    /**
+     * 메뉴 이름 수정 - Setter 사용 지양, 기능에 맞는 메서드를 엔티티에 정의해 사용
+     *
+     * @param menuDTO 수정할 메뉴 정보
+     * @throws IllegalArgumentException 메뉴가 존재하지 않을 경우
+     */
+    @Transactional
+    public void modifyMenu(MenuDTO menuDTO) {
+        Menu foundMenu = menuRepository.findById(menuDTO.getMenuCode())
+            .orElseThrow(IllegalArgumentException::new);
+
+        foundMenu.modifyMenuName(menuDTO.getMenuName());
+    }
+
+    @Transactional
+    public void deleteMenu(Integer menuCode) {
+        menuRepository.deleteById(menuCode);
+    }
 }
