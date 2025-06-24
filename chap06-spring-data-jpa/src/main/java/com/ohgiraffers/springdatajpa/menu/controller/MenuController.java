@@ -2,10 +2,13 @@ package com.ohgiraffers.springdatajpa.menu.controller;
 
 import com.ohgiraffers.springdatajpa.common.Pagenation;
 import com.ohgiraffers.springdatajpa.common.PagingButton;
+import com.ohgiraffers.springdatajpa.menu.dto.CategoryDTO;
 import com.ohgiraffers.springdatajpa.menu.dto.MenuDTO;
 import com.ohgiraffers.springdatajpa.menu.service.MenuService;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.boot.Banner.Mode;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
@@ -14,6 +17,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 @Slf4j // 로그 출력을 위한 Lombok 어노테이션 (log.info 등 사용 가능)
 @Controller
@@ -28,7 +33,7 @@ public class MenuController {
      * 단건 메뉴 조회 기능
      *
      * @param menuCode 조회할 메뉴의 고유 번호 (PathVariable로 URL에서 전달받음)
-     * @param model 뷰에 전달할 데이터를 저장하는 Spring Model 객체
+     * @param model    뷰에 전달할 데이터를 저장하는 Spring Model 객체
      * @return "menu/detail" 뷰 반환
      */
     @GetMapping("/{menuCode}")
@@ -53,7 +58,7 @@ public class MenuController {
     /**
      * 페이징 처리된 메뉴 리스트 조회
      *
-     * @param model 뷰에 데이터를 전달할 Model 객체
+     * @param model    뷰에 데이터를 전달할 Model 객체
      * @param pageable 페이징 정보를 담고 있는 객체 (page, size 등 자동 매핑)
      * @return "menu/list" 템플릿 이름 반환
      */
@@ -85,6 +90,29 @@ public class MenuController {
 
         // 리스트 페이지 뷰 반환
         return "menu/list";
+    }
+
+    @GetMapping("/querymethod")
+    public void querymethodPage() {
+    }
+
+    @GetMapping("/search")
+    public String findByMenuPrice(@RequestParam Integer menuPrice, Model model) {
+
+        List<MenuDTO> menuList = menuService.findByMenuPrice(menuPrice);
+        model.addAttribute("menuList", menuList);
+
+        return "menu/searchResult";
+    }
+
+    @GetMapping("/regist")
+    public void registPage() {
+    }
+
+    @GetMapping("/category")
+    @ResponseBody
+    public List<CategoryDTO> findCategoryList() {
+        return menuService.findAllCategory();
     }
 
 }

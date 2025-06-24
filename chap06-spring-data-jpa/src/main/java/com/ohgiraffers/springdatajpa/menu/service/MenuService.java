@@ -1,10 +1,12 @@
 package com.ohgiraffers.springdatajpa.menu.service;
 
+import com.ohgiraffers.springdatajpa.menu.dto.CategoryDTO;
 import com.ohgiraffers.springdatajpa.menu.dto.MenuDTO;
+import com.ohgiraffers.springdatajpa.menu.entity.Category;
 import com.ohgiraffers.springdatajpa.menu.entity.Menu;
+import com.ohgiraffers.springdatajpa.menu.repository.CategoryRepository;
 import com.ohgiraffers.springdatajpa.menu.repository.MenuRepository;
 import java.util.List;
-import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
@@ -26,6 +28,8 @@ public class MenuService {
 
     // 엔티티와 DTO 간 매핑을 자동화하기 위한 ModelMapper 빈
     private final ModelMapper modelMapper;
+
+    private final CategoryRepository categoryRepository;
 
     /**
      * 주어진 메뉴 코드(menuCode)를 이용해 메뉴 정보를 조회한 후, 해당 엔티티를 MenuDTO로 변환하여 반환한다.
@@ -63,18 +67,16 @@ public class MenuService {
             // map() 메서드는 스트림의 각 요소에 함수를 적용하여 새로운 요소로 변환하는 역할을 한다.
             .map(menu -> modelMapper.map(menu, MenuDTO.class))
             // 변환된 DTO 객체들을 다시 리스트로 수집하여 최종 결과로 반환한다.
-            .toList(); // 자바16부터는 stream().toList() 로 가능 (이전에는 .collect(Collectors.toList());)
+            .toList();  // Java 16 이상: stream().collect(Collectors.toList()) 대신 사용 가능
     }
 
     /**
      * findAll : Pageable
-     *
-     * Pageable 객체를 이용하여 요청된 페이지 정보에 맞게 메뉴 목록을 조회하고,
-     * 조회된 Page<Menu>를 Page<MenuDTO>로 변환하여 반환한다.
-     *
-     * - 클라이언트에서 전달된 페이지 번호가 0 이하일 경우, 0페이지로 고정하여 처리한다.
-     * - menuCode 기준 내림차순 정렬을 적용하여 데이터를 조회한다.
-     * - 반환 타입은 Page<MenuDTO>로, 페이징 정보와 DTO 리스트를 함께 제공한다.
+     * <p>
+     * Pageable 객체를 이용하여 요청된 페이지 정보에 맞게 메뉴 목록을 조회하고, 조회된 Page<Menu>를 Page<MenuDTO>로 변환하여 반환한다.
+     * <p>
+     * - 클라이언트에서 전달된 페이지 번호가 0 이하일 경우, 0페이지로 고정하여 처리한다. - menuCode 기준 내림차순 정렬을 적용하여 데이터를 조회한다. - 반환
+     * 타입은 Page<MenuDTO>로, 페이징 정보와 DTO 리스트를 함께 제공한다.
      *
      * @param pageable 클라이언트로부터 전달받은 페이지 요청 정보 (page 번호, size 등)
      * @return Page<MenuDTO> 객체 (내용 + 전체 페이지 수, 현재 페이지 번호 등 메타데이터 포함)
@@ -96,4 +98,37 @@ public class MenuService {
         // 내부적으로는 스트림을 사용하므로 간결하면서도 성능적으로 효율적이다.
         return menuList.map(menu -> modelMapper.map(menu, MenuDTO.class));
     }
+
+    /**
+     * Query Method: 메뉴 가격이 특정 값보다 높은 메뉴 목록을 조회한다.
+     * <p>
+     * - Spring Data JPA의 쿼리 메서드 명명 규칙을 이용해 repository에서 자동 쿼리 생성 - 정렬 조건은 Sort 객체를 통해 동적으로 전달
+     * (menuPrice 기준 내림차순) - 조회된 엔티티(Menu)를 DTO(MenuDTO)로 변환하여 반환
+     *
+     * @param menuPrice 기준이 되는 메뉴 가격
+     * @return 가격 조건을 만족하는 MenuDTO 리스트
+     */
+    public List<MenuDTO> findByMenuPrice(Integer menuPrice) {
+
+        // List<Menu> menuList = menuRepository.findByMenuPriceGreaterThan(menuPrice);
+        // List<Menu> menuList = menuRepository.findByMenuPriceGreaterThanOrderByMenuPrice(menuPrice);
+
+        // 정렬 조건: menuPrice 기준 내림차순
+        List<Menu> menuList = menuRepository.findByMenuPriceGreaterThan(
+            menuPrice,
+            Sort.by("menuPrice").descending()
+        );
+
+        return menuList.stream()
+            .map(menu -> modelMapper.map(menu, MenuDTO.class))
+            .toList();
+    }
+
+    /* JPQL or Native Query */
+    public List<CategoryDTO> findAllCategory() {
+        List<Category> categoryList = categoryRepository.findAllCategory();
+        return categoryList.stream().map(category -> modelMapper.map(category, CategoryDTO.class))
+            .toList();
+    }
+
 }
